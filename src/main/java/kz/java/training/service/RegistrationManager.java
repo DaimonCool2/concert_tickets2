@@ -9,5 +9,7 @@ import kz.java.training.entity.User;
 public interface RegistrationManager {
 	
 	void registrateUser(User user);
+	
+	boolean checkIfUserExist(String username);
 
 }

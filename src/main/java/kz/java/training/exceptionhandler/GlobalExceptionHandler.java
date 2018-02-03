@@ -1,6 +1,9 @@
-package kz.java.training.exception;
+package kz.java.training.exceptionhandler;
 
 import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import kz.java.training.exception.DatabaseAjaxQueryException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,5 +28,10 @@ public class GlobalExceptionHandler {
 		ModelAndView modelAndView = new ModelAndView("error");
 		modelAndView.addObject("error", ex.getMessage());
 		return modelAndView;
+	}
+	
+	@ExceptionHandler(DatabaseAjaxQueryException.class)
+	public String handleDatabaseAjaxQueryEception() {
+		return "error";
 	}
 }

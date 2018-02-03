@@ -18,5 +18,10 @@ public class RegistrationManagerImpl implements RegistrationManager {
 	public void registrateUser(User user) {
 		userDao.insertEntity(user);
 	}
+
+	@Override
+	public boolean checkIfUserExist(String username) {
+		return userDao.isUserExist(username);
+	}
       
 }

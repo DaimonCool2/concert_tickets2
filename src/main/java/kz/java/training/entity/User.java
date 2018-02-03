@@ -9,17 +9,12 @@ import javax.validation.constraints.Size;
 import kz.java.training.validation.sequence.First;
 import kz.java.training.validation.sequence.Second;
 
-@GroupSequence({ First.class, Second.class, User.class })
 public class User {
-	private static final String USERNAME_PATTERN = "[a-zA-Z0-9_\\-]{3,}";
-	private static final String PASSWORD_PATTERN = "[a-zA-Z0-9_\\-]{6,}";
 
-	@NotEmpty(message = "Пустое поле", groups = First.class)
-	@Pattern(regexp = USERNAME_PATTERN, message = "{username.pattern.error}", groups = Second.class)
+	@NotEmpty(message = "Пустое поле")
 	private String username;
 
-	@NotEmpty(message = "Пустое поле", groups = First.class)
-	@Pattern(regexp = PASSWORD_PATTERN, message = "{password.pattern.error}", groups = Second.class)
+	@NotEmpty(message = "Пустое поле")
 	private String password;
 
 	public String getUsername() {
