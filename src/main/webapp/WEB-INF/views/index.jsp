@@ -96,8 +96,7 @@
     		        flag = data;    		        
     		    },
     		    error: function(){
-        		    flag = true;
-    		    	document.getElementById('databaseError').value = "error";
+    		    	window.location.replace(window.location.href + "database-error");
     	        }
 		    
     		});

@@ -31,7 +31,7 @@
 			<form:label path="username"><spring:message code="username" /></form:label>
 			<form:input path="username" />
 			<form:errors path="username" />
-
+			${sessionScope.id}
 			<form:label path="password"><spring:message code="password" /></form:label>
 			<form:password path="password" />
 			<form:errors path="password" />						

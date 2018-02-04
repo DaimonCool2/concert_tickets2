@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import kz.java.training.exception.DatabaseAjaxQueryException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -30,8 +29,4 @@ public class GlobalExceptionHandler {
 		return modelAndView;
 	}
 	
-	@ExceptionHandler(DatabaseAjaxQueryException.class)
-	public String handleDatabaseAjaxQueryEception() {
-		return "error";
-	}
 }

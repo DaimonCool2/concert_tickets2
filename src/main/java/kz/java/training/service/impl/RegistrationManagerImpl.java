@@ -8,7 +8,7 @@ import kz.java.training.dao.impl.UserDao;
 import kz.java.training.entity.User;
 import kz.java.training.service.RegistrationManager;
 
-@Service("registrationManagerImpl")
+@Service
 public class RegistrationManagerImpl implements RegistrationManager {
 	
 	@Autowired

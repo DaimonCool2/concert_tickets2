@@ -13,11 +13,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
+import org.apache.commons.codec.digest.DigestUtils;
 import kz.java.training.dao.AbstractDao;
 import kz.java.training.entity.User;
 
-@Repository("userDao")
+@Repository()
 public class UserDao implements AbstractDao<User> {
 
 	private SimpleJdbcInsert simpleJdbcInsert;
@@ -44,7 +44,7 @@ public class UserDao implements AbstractDao<User> {
 	public void insertEntity(User entity) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("username", entity.getUsername());
-		params.addValue("password", entity.getPassword());
+		params.addValue("password", DigestUtils.md5Hex(entity.getPassword()));
 		simpleJdbcInsert.execute(params);
 	}
 
@@ -61,47 +61,47 @@ public class UserDao implements AbstractDao<User> {
 		return user != null;
 
 	}
-	
+
 	@Override
 	public boolean isUserExist(User user) {
 		int checkUser = 0;
 		String sql = "SELECT id FROM user WHERE username = :username and password = :password";
-		
+
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("username", user.getUsername());
-		params.addValue("password", user.getPassword());
+		params.addValue("password", DigestUtils.md5Hex(user.getPassword()));
 		try {
-		checkUser = this.jdbcTemplate.queryForObject(sql, params, Integer.class);
-		}catch(EmptyResultDataAccessException ex) {
+			checkUser = this.jdbcTemplate.queryForObject(sql, params, Integer.class);
+		} catch (EmptyResultDataAccessException ex) {
 		}
 		return checkUser != 0;
 
 	}
-	
-//	@Override
-//	public boolean isUserExist(User user) {
-//		User checkUser = null;
-//		String sql = "SELECT username, password FROM user WHERE username = :username and password = :password";
-//		
-//		MapSqlParameterSource params = new MapSqlParameterSource();
-//		params.addValue("username", user.getUsername());
-//		params.addValue("password", user.getPassword());
-//		try {
-//		checkUser = this.jdbcTemplate.queryForObject(sql, params, new UserMapper());
-//		}catch(EmptyResultDataAccessException ex) {
-//		}
-//		return checkUser != null;
-//
-//	}
-	
-	
-//	private static final class UserMapper implements RowMapper<User> {
-//		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-//			User user = new User();
-//			user.setUsername(rs.getString("username"));
-//			user.setPassword(rs.getString("password"));
-//			return user;
-//		}
-//	}
+
+	// @Override
+	// public boolean isUserExist(User user) {
+	// User checkUser = null;
+	// String sql = "SELECT username, password FROM user WHERE username = :username
+	// and password = :password";
+	//
+	// MapSqlParameterSource params = new MapSqlParameterSource();
+	// params.addValue("username", user.getUsername());
+	// params.addValue("password", user.getPassword());
+	// try {
+	// checkUser = this.jdbcTemplate.queryForObject(sql, params, new UserMapper());
+	// }catch(EmptyResultDataAccessException ex) {
+	// }
+	// return checkUser != null;
+	//
+	// }
+
+	// private static final class UserMapper implements RowMapper<User> {
+	// public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+	// User user = new User();
+	// user.setUsername(rs.getString("username"));
+	// user.setPassword(rs.getString("password"));
+	// return user;
+	// }
+	// }
 
 }

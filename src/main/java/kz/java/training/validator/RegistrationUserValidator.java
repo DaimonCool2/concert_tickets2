@@ -17,7 +17,6 @@ public class RegistrationUserValidator implements Validator {
 	private static final String PASSWORD_PATTERN = "[a-zA-Z0-9_\\-]{6,}";
 
 	@Autowired
-	@Qualifier("registrationManagerImpl")
 	private RegistrationManager registrationManager;
 
 	@Override

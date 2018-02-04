@@ -36,13 +36,10 @@ public class RegistrationController {
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
-	private RegistrationUserValidator confirmPasswordValidator;
+	private RegistrationUserValidator registrationUserValidator;
 
 	@Autowired
 	private RegistrationManager registrationManager;
-
-	@Autowired
-	MessageSource messageSource;
 
 	@RequestMapping(value = "/registration", method = RequestMethod.GET)
 	public ModelAndView registration(@ModelAttribute("repeatRegUser") RegistrationUser regUser) {
@@ -52,7 +49,7 @@ public class RegistrationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(@Valid @ModelAttribute RegistrationUser regUser, BindingResult bindingResult,
 			RedirectAttributes rd) {
-		confirmPasswordValidator.validate(regUser, bindingResult);
+		registrationUserValidator.validate(regUser, bindingResult);
 		if (bindingResult.hasErrors()) {
 			rd.addFlashAttribute("org.springframework.validation.BindingResult.regUser", bindingResult);
 			rd.addFlashAttribute("repeatRegUser", regUser);
@@ -77,46 +74,6 @@ public class RegistrationController {
 		} else {
 			return "Некорректное имя пользователя";
 		}
-	}
-
-	@RequestMapping(value = "/get-message-empty-field", method = RequestMethod.GET, produces = {
-			"text/html; charset=UTF-8" })
-	@ResponseBody
-	public String getMessageEmptyField() {
-		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("empty.field", new Object[0], locale);
-	}
-
-	@RequestMapping(value = "/get-message-incorrect-password", method = RequestMethod.GET, produces = {
-			"text/html; charset=UTF-8" })
-	@ResponseBody
-	public String getMessageIncorrectPassword() {
-		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("password.pattern.error", new Object[0], locale);
-	}
-
-	@RequestMapping(value = "/get-message-confirm-password-pattern-error", method = RequestMethod.GET, produces = {
-			"text/html; charset=UTF-8" })
-	@ResponseBody
-	public String getMessageConfirmPasswordPatternError() {
-		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("confirm.password.doesn't.match", new Object[0], locale);
-	}
-
-	@RequestMapping(value = "/get-message-username-pattern-error", method = RequestMethod.GET, produces = {
-			"text/html; charset=UTF-8" })
-	@ResponseBody
-	public String getMessageUsernamePatternError() {
-		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("username.pattern.error", new Object[0], locale);
-	}
-
-	@RequestMapping(value = "/get-message-incorrect-input-data", method = RequestMethod.GET, produces = {
-			"text/html; charset=UTF-8" })
-	@ResponseBody
-	public String getIncorrectInputData() {
-		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("incorrect.input.data", new Object[0], locale);
 	}
 
 }

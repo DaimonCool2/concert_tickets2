@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import kz.java.training.entity.User;
-import kz.java.training.exception.DatabaseAjaxQueryException;
 
 @Controller
 public class MainPageController {
@@ -18,10 +17,7 @@ public class MainPageController {
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView mainPage(@ModelAttribute() User user, Model model) throws DatabaseAjaxQueryException {
-		if(model.asMap().get("databaseError") != null) {
-			throw new DatabaseAjaxQueryException();
-		}
+	public ModelAndView mainPage(@ModelAttribute("repeatLoginUser") User user){
 		return new ModelAndView("index", "user", user);
 	}
 }

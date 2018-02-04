@@ -20,7 +20,7 @@
         url: 'check-if-user-exist',
         data: ({username : $('#username').val()}),
         success: function(data) {
-          $('#checkIfUserExist').html(data);
+        	document.getElementById('checkIfUserExist').textContent = data;
         }
       });
       } else {
@@ -116,7 +116,7 @@
     	   
     	   if(password.match(passwordPattern) == null){
     		   $.ajax({
-        	        url: 'get-message-incorrect-password',
+        	        url: 'get-message-password-pattern-password',
         	        dataType: "text", 
         	        async: false,
         	        success: function(data) {
