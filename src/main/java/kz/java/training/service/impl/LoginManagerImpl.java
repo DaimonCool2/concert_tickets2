@@ -7,7 +7,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kz.java.training.dao.impl.UserDao;
+import kz.java.training.dao.UserDao;
+import kz.java.training.dao.impl.UserDaoImpl;
 import kz.java.training.entity.User;
 import kz.java.training.service.LoginManager;
 import kz.java.training.validator.LoginUserValidator;
@@ -30,8 +31,8 @@ public class LoginManagerImpl implements LoginManager {
 			rd.addFlashAttribute("repeatLoginUser", user);
 			page = "redirect:/";
 		} else {
-			modelMap.addAttribute("id", 5);
-			page = "login";
+			modelMap.addAttribute("id", userDao.selectUserId(user.getUsername()));
+			page = "redirect:/profile";
 		}
 		return page;
 	}

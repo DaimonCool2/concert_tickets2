@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import kz.java.training.dao.impl.UserDao;
+import kz.java.training.dao.UserDao;
+import kz.java.training.dao.impl.UserDaoImpl;
 import kz.java.training.entity.User;
 import kz.java.training.service.RegistrationManager;
 

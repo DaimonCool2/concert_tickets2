@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import kz.java.training.dao.impl.UserDao;
+import kz.java.training.dao.UserDao;
+import kz.java.training.dao.impl.UserDaoImpl;
 import kz.java.training.entity.RegistrationUser;
 import kz.java.training.entity.User;
 

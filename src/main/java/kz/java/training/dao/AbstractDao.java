@@ -10,7 +10,5 @@ public interface AbstractDao<T> {
 
 	void insertEntity(T entity);
 	
-	boolean isUserExist(String username);
-	
-	boolean isUserExist(User user);
+	void updateEntity(T entity);
 }
