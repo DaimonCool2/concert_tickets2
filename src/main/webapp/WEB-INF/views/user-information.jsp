@@ -178,8 +178,7 @@
 					</form:form>
 					
 					
-					
-					
+								
 				</div>
                 
                 <div class="widget personal-info">
