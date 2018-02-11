@@ -18,5 +18,7 @@ public interface UserDao extends AbstractDao<User>{
 	void changePassword(String newPassword, int userId);
 	
 	boolean isCurrentPasswordIsCorrect(String currentPassword, int userId);
+	
+	boolean isUserWithThisEmailExist(String email);
 
 }

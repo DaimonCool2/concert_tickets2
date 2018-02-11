@@ -410,7 +410,7 @@
        	        	flag = true; 
            	        } else {
            	        	$.ajax({
-                	        url: 'get-message-password-pattern-password',
+                	        url: 'get-message-current-password-is-wrong',
                 	        dataType: "text", 
                 	        async: false,
                 	        success: function(data) {

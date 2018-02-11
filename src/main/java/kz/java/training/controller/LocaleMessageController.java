@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LocaleMessageController {
-	
+
 	@Autowired
 	MessageSource messageSource;
 
@@ -45,16 +45,31 @@ public class LocaleMessageController {
 		return messageSource.getMessage("username.pattern.error", new Object[0], locale);
 	}
 
+	@RequestMapping(value = "/get-message-email-pattern-error", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getMessageEmailPatternError() {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage("email.pattern.error", new Object[0], locale);
+	}
+
+	@RequestMapping(value = "/get-message-email-exist", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getMessageEmailExist() {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage("email.exist", new Object[0], locale);
+	}
+
 	@RequestMapping(value = "/get-message-incorrect-input-data", method = RequestMethod.GET, produces = {
 			"text/html; charset=UTF-8" })
 	public String getIncorrectInputData() {
 		Locale locale = LocaleContextHolder.getLocale();
 		return messageSource.getMessage("incorrect.input.data", new Object[0], locale);
 	}
-	
-	@RequestMapping(value = "get-message-current-password-is-wrong", method = RequestMethod.GET, produces = {"text/html; chatset=UTF-8"})
-    public String getCurrentPasswordWrong() {
+
+	@RequestMapping(value = "/get-message-current-password-is-wrong", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getCurrentPasswordWrong() {
 		Locale locale = LocaleContextHolder.getLocale();
-		return messageSource.getMessage("current.password.is.wrong",  new Object[0], locale);
+		return messageSource.getMessage("current.password.is.wrong", new Object[0], locale);
 	}
 }

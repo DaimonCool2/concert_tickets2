@@ -10,137 +10,7 @@
     <link href="<c:url value="/resources/css/styleForRegistration.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    
-    <script type="text/javascript">
-    function doAjax() {
-      var usern = document.forms["registration"]["username"].value
-      if(usern.length > 2){
-      $.ajax({
-        url: 'check-if-user-exist',
-        data: ({username : $('#username').val()}),
-        success: function(data) {
-        	document.getElementById('checkIfUserExist').textContent = data;
-        }
-      });
-      } else {
-       document.getElementById('checkIfUserExist').textContent=null
-       }
-    }
-  </script>
-    
-  <script type="text/javascript">
-  function clearErrorUsername() {
-	  var usern = document.forms["registration"]["username"].value
-      if(usern.length > 2){
-          document.getElementById('errorUsername').textContent=null 
-      } 
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function clearErrorPassword() {
-      document.getElementById('errorPassword').textContent=null 
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function clearErrorConfirmPassword() {
-      document.getElementById('errorConfirmPassword').textContent=null 
-  }
-  </script>
-    
-  
-  <script type="text/javascript">
-   function validateForm1() { 
-	    var emptyField;
-	   
-	    var flag = false;
-        var username = document.forms["registration"]["username"].value; 
-        var password = document.forms["registration"]["password"].value; 
-        var confirmPassword = document.forms["registration"]["confirmPassword"].value;
-
-        if(username != "" && password != "" && confirmPassword != ""){
-            flag = true;
-        } else {
-        
-        	 $.ajax({
-     	        url: 'get-message-empty-field',
-     	        dataType: "text", 
-     	        async: false,
-     	        success: function(data) {
-     	          emptyField = data;		          
-     	        }
-     	      });   
-        
-        if (username == "") { 
-	        document.getElementById('checkIfUserExist').textContent = emptyField;    	      
-        } 
-        if (password == "") { 
-	      	document.getElementById('errorPassword').textContent = emptyField;	            
-        } 
-        if (confirmPassword == "") { 
-      	   document.getElementById('errorConfirmPassword').textContent = emptyField; 
-        } 
-
-        }
-        
-        return flag;
- } 
-   </script> 
    
-   <script type="text/javascript">
-     function validateForm2() {
- 	   var flag = false;
-        
-       if(validateForm1()){
-           var passwordPattern = /[a-zA-Z0-9_\\-]{6,}/;
-           var usernamePattern = /[a-zA-Z0-9_\\-]{3,}/;
-    	   var password = document.forms["registration"]["password"].value;
-           var username = document.forms["registration"]["username"].value; 
-
-           if(username.match(usernamePattern) != null && password.match(passwordPattern) != null && (password == document.forms["registration"]["confirmPassword"].value)){
-           flag = true;
-           } else {
-
-           if(username.match(usernamePattern) == null){
-    		   $.ajax({
-        	        url: 'get-message-username-pattern-error',
-        	        dataType: "text", 
-        	        async: false,
-        	        success: function(data) {
-        		        document.getElementById('checkIfUserExist').textContent = data;    	      
-        	        }
-        	      });		   
-           } 
-    	   
-    	   if(password.match(passwordPattern) == null){
-    		   $.ajax({
-        	        url: 'get-message-password-pattern-password',
-        	        dataType: "text", 
-        	        async: false,
-        	        success: function(data) {
-        	        	document.getElementById('errorPassword').textContent = data;		          
-        	        }
-        	      });		   
-           } else {
-               if(password != document.forms["registration"]["confirmPassword"].value){
-            	   $.ajax({
-           	        url: 'get-message-confirm-password-pattern-error',
-           	        dataType: "text", 
-           	        async: false,
-           	        success: function(data) {
-                        document.getElementById('errorConfirmPassword').textContent = data;
-           	        }
-           	      });
-               }
-           }
-
-           }
-       }
-       return flag;
-     }
-  </script>
    
   
     
@@ -180,10 +50,21 @@
                     <form:input path="username" onkeyup="doAjax(); clearErrorUsername()" class="form-control" /> 
                 </div>
                 <form:errors path="username" id="errorUsername"/>
-			<span id="checkIfUserExist"> </span>
+			<span id="errorUsernameSpan"> </span>
             </div>
         </div>
-
+        
+        <div class="form-group input">
+            <form:label path="email" class="col-md-4 control-label"><spring:message code="email" /></form:label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                    <form:input path="email" onkeyup="clearErrorEmail()" class="form-control"/>			        
+                </div>
+                <form:errors path="email" />
+                <span id="errorEmail"> </span>  
+            </div>
+        </div>
 
         <div class="form-group input">
             <form:label path="password" class="col-md-4 control-label"><spring:message code="password" /></form:label>
@@ -208,6 +89,7 @@
                 <span id="errorConfirmPassword"> </span>  
             </div>
         </div>
+          
 
         <div class="form-group">
             <label class="col-md-4 control-label"></label>
@@ -219,6 +101,191 @@
 
   </form:form>
 </div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    function doAjax() {
+      var usern = document.forms["registration"]["username"].value
+      if(usern.length > 2){
+      $.ajax({
+        url: 'check-if-user-exist',
+        async: false,
+	    type: 'post',
+        data: ({username : $('#username').val()}),
+        success: function(data) {
+        	document.getElementById('errorUsernameSpan').textContent = data;
+        }
+      });
+      } else {
+       document.getElementById('errorUsernameSpan').textContent=null
+       }
+    }
+  </script>
+    
+  <script type="text/javascript">
+  function clearErrorUsername() {
+	  var usern = document.forms["registration"]["username"].value
+      if(usern.length > 2){
+          document.getElementById('"errorUsernameSpan"').textContent=null 
+      } 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearErrorEmail() {
+      document.getElementById('errorEmail').textContent=null 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearErrorPassword() {
+      document.getElementById('errorPassword').textContent=null 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearErrorConfirmPassword() {
+      document.getElementById('errorConfirmPassword').textContent=null 
+  }
+  </script>
+    
+  
+  <script type="text/javascript">
+   function validateForm1() { 
+	    var emptyField;
+	   
+	    var flag = false;
+        var username = document.forms["registration"]["username"].value; 
+        var email = document.forms["registration"]["email"].value; 
+        var password = document.forms["registration"]["password"].value; 
+        var confirmPassword = document.forms["registration"]["confirmPassword"].value;
+
+        if(username != "" && email != "" && password != "" && confirmPassword != ""){
+            flag = true;
+        } else {
+        
+        	 $.ajax({
+     	        url: 'get-message-empty-field',
+     	        dataType: "text", 
+     	        async: false,
+     	        success: function(data) {
+     	          emptyField = data;		          
+     	        }
+     	      });   
+        
+        if (username == "") { 
+	        document.getElementById('errorUsernameSpan').textContent = emptyField;    	      
+        }
+        if (email == "") { 
+        	   document.getElementById('errorEmail').textContent = emptyField; 
+        }
+        if (password == "") { 
+	      	document.getElementById('errorPassword').textContent = emptyField;	            
+        } 
+        if (confirmPassword == "") { 
+      	   document.getElementById('errorConfirmPassword').textContent = emptyField; 
+        } 
+        
+
+        }
+        
+        return flag;
+ } 
+   </script> 
+   
+   <script type="text/javascript">
+     function validateForm2() {
+ 	   var flag = false;
+        
+       if(validateForm1()){
+           var passwordPattern = /[a-zA-Z0-9_\\-]{6,}/;
+           var emailPattern =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
+           var usernamePattern = /[a-zA-Z0-9_\\-]{3,}/;
+           var username = document.forms["registration"]["username"].value; 
+           var email = document.forms["registration"]["email"].value; 
+    	   var password = document.forms["registration"]["password"].value;
+
+           if(username.match(usernamePattern) != null && email.match(emailPattern) && password.match(passwordPattern) != null && (password == document.forms["registration"]["confirmPassword"].value)){
+           flag = true;
+           } else {
+
+           if(username.match(usernamePattern) == null){
+    		   $.ajax({
+        	        url: 'get-message-username-pattern-error',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        		        document.getElementById('errorUsernameSpan').textContent = data;    	      
+        	        }
+        	      });		   
+           } 
+
+           if(email.match(emailPattern) == null){
+    		   $.ajax({
+        	        url: 'get-message-email-pattern-error',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        		        document.getElementById('errorEmail').textContent = data;    	      
+        	        }
+        	      });		   
+           } 
+    	   
+    	   if(password.match(passwordPattern) == null){
+    		   $.ajax({
+        	        url: 'get-message-password-pattern-password',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        	        	document.getElementById('errorPassword').textContent = data;		          
+        	        }
+        	      });		   
+           } else {
+               if(password != document.forms["registration"]["confirmPassword"].value){
+            	   $.ajax({
+           	        url: 'get-message-confirm-password-pattern-error',
+           	        dataType: "text", 
+           	        async: false,
+           	        success: function(data) {
+                        document.getElementById('errorConfirmPassword').textContent = data;
+           	        }
+           	      });
+               }
+           }
+           }
+
+           if(email.match(emailPattern) != null){
+           $.ajax({
+     	        url: 'check-email-exist',
+     	        async: false,
+     		    type: 'post',
+     	        data: ({email : $('#email').val()}),
+     	        success: function(data) {
+         	        if(data == true){
+         	        	$.ajax({
+                  	        url: 'get-message-email-exist',
+                  	        dataType: "text", 
+                  	        async: false,
+                  	        success: function(data) {
+                         	  document.getElementById('errorEmail').textContent = data;		          
+                  	        }
+                  	      });    
+     	        	flag = false; 
+         	        } else {
+             	    flag = true;    
+             	    }	
+         	    }
+     	      });
+           }
+
+
+
+           
+       }
+       return flag;
+     }
+  </script>
 
 
 </body>

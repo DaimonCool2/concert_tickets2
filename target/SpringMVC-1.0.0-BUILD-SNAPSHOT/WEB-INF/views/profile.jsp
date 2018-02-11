@@ -118,7 +118,7 @@
                             <!-- User Name -->
                             <h5 class="text-center">Samanta Doe</h5>
                             <p>Joined February 06, 2017</p>
-                            <a href="user-information" class="btn btn-main-sm">Edit Profile</a>
+                            <a href="profile-information" class="btn btn-main-sm">Edit Profile</a>
                         </div>
                         <!-- Dashboard Links -->
                         <div class="widget user-dashboard-menu">

@@ -50,10 +50,21 @@
                     <form:input path="username" onkeyup="doAjax(); clearErrorUsername()" class="form-control" /> 
                 </div>
                 <form:errors path="username" id="errorUsername"/>
-			<span id="checkIfUserExist"> </span>
+			<span id="errorUsernameSpan"> </span>
             </div>
         </div>
-
+        
+        <div class="form-group input">
+            <form:label path="email" class="col-md-4 control-label"><spring:message code="email" /></form:label>
+            <div class="col-md-4 inputGroupContainer">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                    <form:input path="email" onkeyup="clearErrorEmail()" class="form-control"/>			        
+                </div>
+                <form:errors path="email" />
+                <span id="errorEmail"> </span>  
+            </div>
+        </div>
 
         <div class="form-group input">
             <form:label path="password" class="col-md-4 control-label"><spring:message code="password" /></form:label>
@@ -78,6 +89,7 @@
                 <span id="errorConfirmPassword"> </span>  
             </div>
         </div>
+          
 
         <div class="form-group">
             <label class="col-md-4 control-label"></label>
@@ -102,11 +114,11 @@
 	    type: 'post',
         data: ({username : $('#username').val()}),
         success: function(data) {
-        	document.getElementById('checkIfUserExist').textContent = data;
+        	document.getElementById('errorUsernameSpan').textContent = data;
         }
       });
       } else {
-       document.getElementById('checkIfUserExist').textContent=null
+       document.getElementById('errorUsernameSpan').textContent=null
        }
     }
   </script>
@@ -115,8 +127,14 @@
   function clearErrorUsername() {
 	  var usern = document.forms["registration"]["username"].value
       if(usern.length > 2){
-          document.getElementById('errorUsername').textContent=null 
+          document.getElementById('"errorUsernameSpan"').textContent=null 
       } 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearErrorEmail() {
+      document.getElementById('errorEmail').textContent=null 
   }
   </script>
   
@@ -139,10 +157,11 @@
 	   
 	    var flag = false;
         var username = document.forms["registration"]["username"].value; 
+        var email = document.forms["registration"]["email"].value; 
         var password = document.forms["registration"]["password"].value; 
         var confirmPassword = document.forms["registration"]["confirmPassword"].value;
 
-        if(username != "" && password != "" && confirmPassword != ""){
+        if(username != "" && email != "" && password != "" && confirmPassword != ""){
             flag = true;
         } else {
         
@@ -156,14 +175,18 @@
      	      });   
         
         if (username == "") { 
-	        document.getElementById('checkIfUserExist').textContent = emptyField;    	      
-        } 
+	        document.getElementById('errorUsernameSpan').textContent = emptyField;    	      
+        }
+        if (email == "") { 
+        	   document.getElementById('errorEmail').textContent = emptyField; 
+        }
         if (password == "") { 
 	      	document.getElementById('errorPassword').textContent = emptyField;	            
         } 
         if (confirmPassword == "") { 
       	   document.getElementById('errorConfirmPassword').textContent = emptyField; 
         } 
+        
 
         }
         
@@ -177,11 +200,13 @@
         
        if(validateForm1()){
            var passwordPattern = /[a-zA-Z0-9_\\-]{6,}/;
+           var emailPattern =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,4}$/;
            var usernamePattern = /[a-zA-Z0-9_\\-]{3,}/;
-    	   var password = document.forms["registration"]["password"].value;
            var username = document.forms["registration"]["username"].value; 
+           var email = document.forms["registration"]["email"].value; 
+    	   var password = document.forms["registration"]["password"].value;
 
-           if(username.match(usernamePattern) != null && password.match(passwordPattern) != null && (password == document.forms["registration"]["confirmPassword"].value)){
+           if(username.match(usernamePattern) != null && email.match(emailPattern) && password.match(passwordPattern) != null && (password == document.forms["registration"]["confirmPassword"].value)){
            flag = true;
            } else {
 
@@ -191,7 +216,18 @@
         	        dataType: "text", 
         	        async: false,
         	        success: function(data) {
-        		        document.getElementById('checkIfUserExist').textContent = data;    	      
+        		        document.getElementById('errorUsernameSpan').textContent = data;    	      
+        	        }
+        	      });		   
+           } 
+
+           if(email.match(emailPattern) == null){
+    		   $.ajax({
+        	        url: 'get-message-email-pattern-error',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        		        document.getElementById('errorEmail').textContent = data;    	      
         	        }
         	      });		   
            } 
@@ -217,8 +253,36 @@
            	      });
                }
            }
-
            }
+
+           if(email.match(emailPattern) != null){
+           $.ajax({
+     	        url: 'check-email-exist',
+     	        async: false,
+     		    type: 'post',
+     	        data: ({email : $('#email').val()}),
+     	        success: function(data) {
+         	        if(data == true){
+         	        	$.ajax({
+                  	        url: 'get-message-email-exist',
+                  	        dataType: "text", 
+                  	        async: false,
+                  	        success: function(data) {
+                      	      console.log(data)
+                         	  document.getElementById('errorEmail').textContent = data;		          
+                  	        }
+                  	      });    
+     	        	flag = false; 
+         	        } else {
+             	    flag = true;    
+             	    }	
+         	    }
+     	      });
+           }
+
+
+
+           
        }
        return flag;
      }

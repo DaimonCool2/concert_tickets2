@@ -11,5 +11,7 @@ public interface RegistrationManager {
 	void registrateUser(User user);
 	
 	boolean checkIfUserExist(String username);
+	
+	boolean checkIfUserWithThisEmailExist(String email);
 
 }

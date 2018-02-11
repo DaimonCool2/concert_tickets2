@@ -14,6 +14,7 @@ import kz.java.training.service.RegistrationManager;
 public class RegistrationUserValidator implements Validator {
 
 	private static final String USERNAME_PATTERN = "[a-zA-Z0-9_\\-]{3,}";
+	private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,4}$";
 	private static final String PASSWORD_PATTERN = "[a-zA-Z0-9_\\-]{6,}";
 
 	@Autowired
@@ -28,10 +29,13 @@ public class RegistrationUserValidator implements Validator {
 	public void validate(Object regUser, Errors errors) {
 		RegistrationUser user = (RegistrationUser) regUser;
 
-		if (!user.getUsername().isEmpty() && !user.getPassword().isEmpty() && !user.getConfirmPassword().isEmpty()) {
+		if (!user.getUsername().isEmpty() && !user.getEmail().isEmpty() && !user.getPassword().isEmpty() && !user.getConfirmPassword().isEmpty()) {
 
 			if (!user.getUsername().matches(USERNAME_PATTERN)) {
 				errors.rejectValue("username", "username.pattern.error");
+			}
+			if (!user.getEmail().matches(EMAIL_PATTERN)) {
+				errors.rejectValue("email", "email.pattern.error");
 			}
 			if (!user.getPassword().matches(PASSWORD_PATTERN)) {
 				errors.rejectValue("password", "password.pattern.error");

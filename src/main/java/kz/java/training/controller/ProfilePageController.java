@@ -61,10 +61,6 @@ public class ProfilePageController {
 			"application/json" })
 	@ResponseBody
 	public boolean checkIfUserExist(@RequestParam String currentPassword, @ModelAttribute("id") int userId) {
-		if (profileManager.isCurrentPasswordCorrect(currentPassword, userId)) {
-			return true;
-		} else {
-			return false;
-		}
+		return profileManager.isCurrentPasswordCorrect(currentPassword, userId);		
 	}
 }

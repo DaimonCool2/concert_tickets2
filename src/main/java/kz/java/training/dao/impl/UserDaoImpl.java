@@ -26,6 +26,7 @@ import kz.java.training.dao.AbstractDao;
 import kz.java.training.dao.UserDao;
 import kz.java.training.entity.ChangePasswordEntity;
 import kz.java.training.entity.PersonalInformation;
+import kz.java.training.entity.RegistrationUser;
 import kz.java.training.entity.User;
 
 @Repository
@@ -38,7 +39,7 @@ public class UserDaoImpl implements UserDao{
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 		this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("user").usingColumns("username",
-				"password");
+				"password", "email");
 	}
 
 	@Override
@@ -58,9 +59,11 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public void insertEntity(User entity) {
+		RegistrationUser registrationUser = (RegistrationUser) entity;
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("username", entity.getUsername());
-		params.addValue("password", DigestUtils.md5Hex(entity.getPassword()));
+		params.addValue("username", registrationUser.getUsername());
+		params.addValue("email", registrationUser.getEmail());
+		params.addValue("password", DigestUtils.md5Hex(registrationUser.getPassword()));
 		simpleJdbcInsert.execute(params);
 	}
 
@@ -92,6 +95,20 @@ public class UserDaoImpl implements UserDao{
 		}
 		return checkUser != 0;
 
+	}
+	
+	@Override
+	public boolean isUserWithThisEmailExist(String email) {
+		int checkUser = 0;
+		String sql = "SELECT id FROM user WHERE email = :email";
+
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("email", email);
+		try {
+			checkUser = jdbcTemplate.queryForObject(sql, params, Integer.class);
+		} catch (EmptyResultDataAccessException ex) {
+		}
+		return checkUser != 0;
 	}
 	
 	@Override

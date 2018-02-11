@@ -24,5 +24,10 @@ public class RegistrationManagerImpl implements RegistrationManager {
 	public boolean checkIfUserExist(String username) {
 		return userDao.isUserExist(username);
 	}
+
+	@Override
+	public boolean checkIfUserWithThisEmailExist(String email) {
+		return userDao.isUserWithThisEmailExist(email);
+	}
       
 }

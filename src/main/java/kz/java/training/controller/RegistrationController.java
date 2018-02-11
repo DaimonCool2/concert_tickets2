@@ -76,4 +76,10 @@ public class RegistrationController {
 		}
 	}
 
+	@RequestMapping(value = "/check-email-exist", method = RequestMethod.POST, produces = { "application/json" })
+	@ResponseBody
+	public boolean checkEmailExist(@RequestParam String email) {
+		return registrationManager.checkIfUserWithThisEmailExist(email);
+	}
+
 }

@@ -23,6 +23,8 @@
   <link href="<c:url value="/resources/plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />" rel="stylesheet">
   <link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
 
+ 
+
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,6 +32,8 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  
+  
 
 </head>
 
@@ -145,22 +149,36 @@
 				<div class="widget personal-info">
 					<h3 class="widget-header user">Edit Personal Information</h3>
 					
-					<form:form method="POST" name="personalInformationForm" onsubmit="return validateLoginForm2()" modelAttribute="user" action="login" class="form">
-					<form action="#">
+					
+					
+<!-- 					onsubmit="return validateLoginForm()" -->
+					<form:form method="POST" name="personalInformationForm" onsubmit="return validatePersonalInformationForm()" modelAttribute="personalInformation" action="update-information">
+						<spring:message code="first.name" var="placeholderFirstName" />
+						<spring:message code="last.name" var="placeholderLastName" />
+						
 						<!-- First Name -->
 						<div class="form-group">
-						    <label for="first-name">First Name</label>
-						    <input type="text" class="form-control" id="first-name">
+						
+						<form:label path="firstName">${placeholderFirstName}</form:label>
+						<form:input path="firstName" placeholder='${placeholderFirstName}' onkeyup="clearEmptyFirstname()" class="form-control"/>
+			            <form:errors path="firstName" />
+			            <span id="emptyFirstname"> </span>
+						
 						</div>
 						<!-- Last Name -->
 						<div class="form-group">
-						    <label for="last-name">Last Name</label>
-						    <input type="text" class="form-control" id="last-name">
+						
+						<form:label path="lastName" >${placeholderLastName}</form:label>
+						<form:input path="lastName" placeholder='${placeholderLastName}' onkeyup="clearEmptyLastname()" class="form-control"/>
+			            <form:errors path="lastName" />
+			            <span id="emptyLastname"> </span>
+						    
 						</div>
-						<button class="btn btn-transparent">Save My Changes</button>
-					</form>
+						<button type="submit" class="btn btn-transparent">Save My Changes</button>
 					</form:form>
 					
+					
+								
 				</div>
                 
                 <div class="widget personal-info">
@@ -173,25 +191,50 @@
 				<!-- Change Password -->
 				<div class="widget change-password">
 					<h3 class="widget-header user">Edit Password</h3>
-					<form action="#">
+					
+					<form:form method="POST" name="changePasswordForm" onsubmit="return validateChangePasswordForm2()" modelAttribute="changePasswordEntity" action="change-password">		
+					
+					<spring:message code="current.password" var="placeholderCurrentPassword" />
+			        <spring:message code="new.password" var="placeholderNewPassword" />
+			        <spring:message code="confirm.new.password" var="placeholderConfirmNewPassword" />			
+						
 						<!-- Current Password -->
+						
 						<div class="form-group">
-						    <label for="current-password">Current Password</label>
-						    <input type="password" class="form-control" id="current-password">
+
+			                <form:label path="currentPassword" >${placeholderCurrentPassword} </form:label>
+			                <form:password path="currentPassword" placeholder='${placeholderCurrentPassword}' onkeyup="clearEmptyCurrentPassword()" class="form-control"/>
+			                <form:errors path="currentPassword" />
+			            	<span id="errorCurrentPassword"> </span>
+			            
 						</div>
+						
 						<!-- New Password -->
+						
 						<div class="form-group">
-						    <label for="new-password">New Password</label>
-						    <input type="password" class="form-control" id="new-password">
+						
+						    <form:label path="newPassword" >${placeholderNewPassword} </form:label>
+			                <form:password path="newPassword" placeholder='${placeholderNewPassword}' onkeyup="clearEmptyNewPassword()" class="form-control"/>
+			                <form:errors path="newPassword" />
+			            	<span id="errorNewPassword"> </span>
+			            	
 						</div>
+						
 						<!-- Confirm New Password -->
+						
 						<div class="form-group">
-						    <label for="confirm-password">Confirm New Password</label>
-						    <input type="password" class="form-control" id="confirm-password">
+						
+						    <form:label path="confirmNewPassword" >${placeholderConfirmNewPassword} </form:label>
+			                <form:password path="confirmNewPassword" placeholder='${placeholderConfirmNewPassword}' onkeyup="clearEmptyConfirmNewPassword()" class="form-control"/>
+			                <form:errors path="confirmNewPassword" />
+			            	<span id="errorConfirmNewPassword"> </span>
+			            	
 						</div>
+						
 						<!-- Submit Button -->
-						<button class="btn btn-transparent">Change Password</button>
-					</form>
+						<button type="submit" class="btn btn-transparent">Change Password</button>
+					</form:form>
+					
 				</div>
 				<!-- Change Email Address -->
 				<div class="widget change-email mb-0">
@@ -243,6 +286,174 @@
       <a id="top" class="" href=""><i class="fa fa-angle-up"></i></a>
     </div>
 </footer>
+
+  <script type="text/javascript">
+  function clearEmptyFirstname() {
+      document.getElementById('emptyFirstname').textContent=null  
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearEmptyLastname() {
+      document.getElementById('emptyLastname').textContent=null 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function validatePersonalInformationForm() {
+	  var flag = false; 
+	  
+	  var emptyField;
+	  var firstName = document.forms["personalInformationForm"]["firstName"].value; 
+      var lastName = document.forms["personalInformationForm"]["lastName"].value;
+
+      if(firstName != "" && lastName != ""){
+          flag = true;
+      } else {
+
+//     	  jQuery.noConflict();
+    	  $.ajax({
+     	        url: 'get-message-empty-field',
+     	        dataType: "text", 
+     	        async: false,
+     	        success: function(data) {
+     	            emptyField = data;		          
+     	        }
+     	      });
+
+      
+      if (firstName == "") {
+          document.getElementById('emptyFirstname').textContent = emptyField;
+      } 
+      if (lastName == "") { 
+	      document.getElementById('emptyLastname').textContent = emptyField;	            
+      }    
+      }  
+      return flag;
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearEmptyCurrentPassword() {
+      document.getElementById('errorCurrentPassword').textContent=null  
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearEmptyNewPassword() {
+      document.getElementById('errorNewPassword').textContent=null 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearEmptyConfirmNewPassword() {
+      document.getElementById('errorConfirmNewPassword').textContent=null 
+  }
+  </script>
+  
+
+  <script type="text/javascript">
+  function validateChangePasswordForm1() {
+	  var flag = false; 
+	  
+	  var emptyField;
+	  var currentPassword = document.forms["changePasswordForm"]["currentPassword"].value; 
+      var newPassword = document.forms["changePasswordForm"]["newPassword"].value;
+      var confirmNewPassword = document.forms["changePasswordForm"]["confirmNewPassword"].value;
+
+      if(currentPassword != "" && newPassword != "" && confirmNewPassword != ""){
+          flag = true;
+      } else {
+          
+//     	  jQuery.noConflict();
+    	  $.ajax({
+     	        url: 'get-message-empty-field',
+     	        dataType: "text", 
+     	        async: false,
+     	        success: function(data) {
+     	            emptyField = data;		          
+     	        }
+     	      });
+      
+      if (currentPassword == "") {
+          document.getElementById('errorCurrentPassword').textContent = emptyField;
+      } 
+      if (newPassword == "") { 
+	      document.getElementById('errorNewPassword').textContent = emptyField;	            
+      }   
+      if (confirmNewPassword == "") { 
+	      document.getElementById('errorConfirmNewPassword').textContent = emptyField;	            
+      }   
+      }  
+      return flag;
+  }
+  </script>
+  
+  <script type="text/javascript">
+     function validateChangePasswordForm2() {
+ 	   var flag = false;
+        
+       if(validateChangePasswordForm1()){
+           var passwordPattern = /[a-zA-Z0-9_\\-]{6,}/;
+    	   var password = document.forms["changePasswordForm"]["newPassword"].value;
+
+           if(password.match(passwordPattern) != null && (password == document.forms["changePasswordForm"]["confirmNewPassword"].value)){
+
+        	   //jQuery.noConflict();
+        	   $.ajax({
+       	        url: 'check-current-password',
+       	        async: false,
+       		    type: 'post',
+       	        data: ({currentPassword : $('#currentPassword').val()}),
+       	        success: function(data) {
+           	        if(data == true){
+       	        	flag = true; 
+           	        } else {
+           	        	$.ajax({
+                	        url: 'get-message-current-password-is-wrong',
+                	        dataType: "text", 
+                	        async: false,
+                	        success: function(data) {
+                       	        document.getElementById('errorCurrentPassword').textContent = data;		          
+                	        }
+                	      });
+           	        flag = false;    
+               	    }
+       	        	
+           	    }
+       	      });    
+           
+           } else {
+ 	   
+    	   if(password.match(passwordPattern) == null){
+    		   $.ajax({
+        	        url: 'get-message-password-pattern-password',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        	        	document.getElementById('errorNewPassword').textContent = data;		          
+        	        }
+        	      });		   
+           } else {
+               if(password != document.forms["changePasswordForm"]["confirmNewPassword"].value){
+            	   $.ajax({
+           	        url: 'get-message-confirm-password-pattern-error',
+           	        dataType: "text", 
+           	        async: false,
+           	        success: function(data) {
+                        document.getElementById('errorConfirmNewPassword').textContent = data;
+           	        }
+           	      });
+               }
+           }
+
+           }
+       }
+       return flag;
+     }
+  </script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
       <script src="<c:url value="/resources/plugins/jquery/jquery.min.js" />"> </script>
       <script src="<c:url value="/resources/plugins/jquery-ui/jquery-ui.min.js" />"> </script>

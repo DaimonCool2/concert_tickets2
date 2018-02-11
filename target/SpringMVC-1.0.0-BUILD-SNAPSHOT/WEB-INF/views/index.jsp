@@ -23,7 +23,6 @@
     <link href="<c:url value="/resources/plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/style.css" />" rel="stylesheet">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,92 +31,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
   
-  <script type="text/javascript">
-  function clearEmptyUsername() {
-      document.getElementById('emptyUsername').textContent=null  
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function clearEmptyPassword() {
-      document.getElementById('emptyPassword').textContent=null 
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function validateLoginForm() {
-	  var flag = false; 
-	  
-	  var emptyField;
-	  var username = document.forms["loginForm"]["username"].value; 
-      var password = document.forms["loginForm"]["password"].value;
-
-      if(username != "" && password != ""){
-          flag = true;
-      } else {
-
-    	  jQuery.noConflict();
-    	  $.ajax({
-     	        url: 'get-message-empty-field',
-     	        dataType: "text", 
-     	        async: false,
-     	        success: function(data) {
-     	            emptyField = data;		          
-     	        }
-     	      });
-
-      
-      if (username == "") {
-          document.getElementById('emptyUsername').textContent = emptyField;
-      } 
-      if (password == "") { 
-	      document.getElementById('emptyPassword').textContent = emptyField;	            
-      }    
-      }  
-      return flag;
-  }
-  </script>
-  
-  <script type="text/javascript">
-     function validateLoginForm2() {
- 	   var flag = false;
-        
-       if(validateLoginForm()){
-    	   jQuery.noConflict();
-    	   $.ajax({
-    		    url: 'check-input-user-data',
-    		    dataType: 'json',
-    		    async: false,
-    		    type: 'post',
-    		    contentType: 'application/json',
-    		    data: JSON.stringify( { "username": $('#username').val(), "password": $('#password').val() } ),
-    		    processData: false,
-    		    success: function(data){
-    		        flag = data;    		        
-    		    },
-    		    error: function(){
-    		    	window.location.replace(window.location.href + "database-error");
-    	        }
-		    
-    		});
-
-    	   if(flag == false){
-    	    	  jQuery.noConflict();
-    	     	  $.ajax({
-    	      	        url: 'get-message-incorrect-input-data',
-    	      	        dataType: "text", 
-    	      	        async: false,
-    	      	        success: function(data) {
-    	      	        	document.getElementById('emptyUsername').textContent = data;		          
-    	      	        }
-    	      	      });
-    	   }
-       }
-
-       return flag;
-       
-     }
-  </script>
+ 
 
 
 </head>
@@ -640,6 +554,96 @@
     </footer>
 
     <!-- JAVASCRIPTS -->
+    
+     <script type="text/javascript">
+  function clearEmptyUsername() {
+      document.getElementById('emptyUsername').textContent=null  
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function clearEmptyPassword() {
+      document.getElementById('emptyPassword').textContent=null 
+  }
+  </script>
+  
+  <script type="text/javascript">
+  function validateLoginForm() {
+	  var flag = false; 
+	  
+	  var emptyField;
+	  var username = document.forms["loginForm"]["username"].value; 
+      var password = document.forms["loginForm"]["password"].value;
+
+      if(username != "" && password != ""){
+          flag = true;
+      } else {
+
+    	  jQuery.noConflict();
+    	  $.ajax({
+     	        url: 'get-message-empty-field',
+     	        dataType: "text", 
+     	        async: false,
+     	        success: function(data) {
+     	            emptyField = data;		          
+     	        }
+     	      });
+
+      
+      if (username == "") {
+          document.getElementById('emptyUsername').textContent = emptyField;
+      } 
+      if (password == "") { 
+	      document.getElementById('emptyPassword').textContent = emptyField;	            
+      }    
+      }  
+      return flag;
+  }
+  </script>
+  
+  <script type="text/javascript">
+     function validateLoginForm2() {
+ 	   var flag = false;
+        
+       if(validateLoginForm()){
+     	   jQuery.noConflict();
+    	   $.ajax({
+    		    url: 'check-input-user-data',
+    		    dataType: 'json',
+    		    async: false,
+    		    type: 'post',
+    		    contentType: 'application/json',
+    		    data: JSON.stringify( { "username": $('#username').val(), "password": $('#password').val() } ),
+    		    processData: false,
+    		    success: function(data){
+    		        flag = data;    		        
+    		    },
+    		    error: function(){
+    		    	window.location.replace(window.location.href + "database-error");
+    	        }
+		    
+    		});
+
+    	   if(flag == false){
+    	    	  jQuery.noConflict();
+    	     	  $.ajax({
+    	      	        url: 'get-message-incorrect-input-data',
+    	      	        dataType: "text", 
+    	      	        async: false,
+    	      	        success: function(data) {
+    	      	        	document.getElementById('emptyUsername').textContent = data;		          
+    	      	        }
+    	      	      });
+    	   }
+       }
+
+       return flag;
+       
+     }
+  </script>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
     
     <script src="<c:url value="/resources/plugins/jquery/dist/jquery.slim.js" />"> </script>
 
