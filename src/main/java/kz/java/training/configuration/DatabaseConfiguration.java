@@ -24,4 +24,5 @@ public class DatabaseConfiguration {
     public PlatformTransactionManager txManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+	
 }
