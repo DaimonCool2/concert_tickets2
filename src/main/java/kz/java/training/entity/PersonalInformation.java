@@ -4,10 +4,8 @@ import javax.validation.constraints.NotEmpty;
 
 public class PersonalInformation {
 
-	@NotEmpty(message = "Пустое поле")
 	private String firstName;
 
-	@NotEmpty(message = "Пустое поле")
 	private String lastName;
 
 	public PersonalInformation() {}

@@ -30,7 +30,7 @@ import kz.java.training.entity.RegistrationUser;
 import kz.java.training.entity.User;
 
 @Repository
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
 	private SimpleJdbcInsert simpleJdbcInsert;
 	private NamedParameterJdbcTemplate jdbcTemplate;
@@ -51,10 +51,10 @@ public class UserDaoImpl implements UserDao{
 	public void deleteEntityById(int id) {
 
 	}
-	
+
 	@Override
 	public void updateEntity(User entity) {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -69,48 +69,37 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public boolean isUserExist(String username) {
-		String user = null;
+		String sql = "SELECT EXISTS (SELECT username FROM user WHERE username = :username)";
+
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("username", username);
-		try {
-			user = jdbcTemplate.queryForObject("SELECT username FROM user WHERE username = :username", params,
-					String.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
-		return user != null;
+
+		return jdbcTemplate.queryForObject(sql, params, boolean.class);
 
 	}
 
 	@Override
 	public boolean isUserExist(User user) {
-		int checkUser = 0;
-		String sql = "SELECT id FROM user WHERE username = :username and password = :password";
+		String sql = "SELECT EXISTS (SELECT id FROM user WHERE username = :username and password = :password)";
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("username", user.getUsername());
 		params.addValue("password", DigestUtils.md5Hex(user.getPassword()));
-		try {
-			checkUser = jdbcTemplate.queryForObject(sql, params, Integer.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
-		return checkUser != 0;
+
+		return jdbcTemplate.queryForObject(sql, params, boolean.class);
 
 	}
-	
+
 	@Override
 	public boolean isUserWithThisEmailExist(String email) {
-		int checkUser = 0;
-		String sql = "SELECT id FROM user WHERE email = :email";
+		String sql = "SELECT EXISTS (SELECT id FROM user WHERE email = :email)";
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("email", email);
-		try {
-			checkUser = jdbcTemplate.queryForObject(sql, params, Integer.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
-		return checkUser != 0;
+
+		return jdbcTemplate.queryForObject(sql, params, boolean.class);
 	}
-	
+
 	@Override
 	public int selectUserId(String username) {
 		int userId = 0;
@@ -118,33 +107,28 @@ public class UserDaoImpl implements UserDao{
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("username", username);
-		try {
-			userId = jdbcTemplate.queryForObject(sql, params, Integer.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
+		
+		userId = jdbcTemplate.queryForObject(sql, params, Integer.class);
 		return userId;
 	}
 
 	@Override
 	public void insertPersonalInformationForeignKey(int userId, int personalInformationId) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("id", userId);		
+		params.addValue("id", userId);
 		params.addValue("personal_information_id", personalInformationId);
-        jdbcTemplate.update("UPDATE user SET personal_information_id = :personal_information_id WHERE id = :id", params);
+		jdbcTemplate.update("UPDATE user SET personal_information_id = :personal_information_id WHERE id = :id",
+				params);
 	}
-	
+
 	@Override
 	public boolean ifUserHasPersonalInformationForeignKey(int id) {
-		Object checkIfUserHasForeignKey = null;
-		String sql = "SELECT personal_information_id FROM user WHERE id = :id";
+		String sql = "SELECT personal_information_id IS NOT NULL FROM concert_tickets.user WHERE id = :id";
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("id", id);
-		try {
-			checkIfUserHasForeignKey = jdbcTemplate.queryForObject(sql, params, Object.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
-		return checkIfUserHasForeignKey != null;
+
+		return jdbcTemplate.queryForObject(sql, params, boolean.class);
 	}
 
 	@Override
@@ -159,19 +143,22 @@ public class UserDaoImpl implements UserDao{
 
 	@Override
 	public boolean isCurrentPasswordIsCorrect(String currentPassword, int userId) {
-		int checkCurrentPassword = 0;
-		String sql = "SELECT id FROM user WHERE id = :id and password = :password";
+		String sql = "SELECT EXISTS(SELECT id FROM user WHERE id = :id and password = :password)";
 
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("id", userId);
 		params.addValue("password", DigestUtils.md5Hex(currentPassword));
-		try {
-			checkCurrentPassword = jdbcTemplate.queryForObject(sql, params, Integer.class);
-		} catch (EmptyResultDataAccessException ex) {
-		}
-		return checkCurrentPassword != 0;
+
+		return jdbcTemplate.queryForObject(sql, params, boolean.class);
 	}
 
+	@Override
+	public String selectUsername(int userId) {
+		String sql = "SELECT username FROM user WHERE id = :id";
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("id", userId);
+		return jdbcTemplate.queryForObject(sql, params, String.class);
+	}
 
 	// @Override
 	// public boolean isUserExist(User user) {

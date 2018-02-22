@@ -10,9 +10,13 @@ import kz.java.training.entity.PersonalInformation;
 
 public interface ProfileManager {
 	
-	String updateProfileInformation(PersonalInformation personalInformation, int userId, BindingResult bindingResult, RedirectAttributes rd);
+	String updateProfileInformation(PersonalInformation personalInformation, int userId);
 	
 	String changePassword(ChangePasswordEntity changePasswordEntity, int userId, BindingResult bindingResult, RedirectAttributes rd);
 
 	boolean isCurrentPasswordCorrect(String password, int userId);
+	
+	String getUsernameFromDB(int userId);
+	
+	PersonalInformation getPersonalInformationFromDB(int userId);
 }

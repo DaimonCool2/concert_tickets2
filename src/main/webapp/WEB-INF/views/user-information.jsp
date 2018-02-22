@@ -104,7 +104,6 @@
 <!--==================================
 =            User Profile            =
 ===================================-->
-
 <section class="user-profile section">
 	<div class="container">
 		<div class="row">
@@ -116,9 +115,10 @@
 						<div class="profile-thumb">
 							<img src="<c:url value="/resources/images/user/empty_avatar.png" />" alt="" class="rounded-circle">
 						</div>
-						<!-- User Name -->
-						<h5 class="text-center">Samanta Doe</h5>
-						<p>Joined February 06, 2017</p>
+						
+						<h5 class="text-center">${username}</h5>
+                        <p>${personalInformationForProfile.firstName} ${personalInformationForProfile.lastName}</p>
+                        <a href="profile-information" class="btn btn-main-sm">Edit Profile</a>
 					</div>
 					<!-- Dashboard Links -->
 					<div class="widget user-dashboard-menu">
@@ -147,31 +147,31 @@
 			<div class="col-md-10 offset-md-1 col-lg-8 offset-lg-0">
 				<!-- Edit Personal Info -->
 				<div class="widget personal-info">
-					<h3 class="widget-header user">Edit Personal Information</h3>
-					
-					
+					<h3 class="widget-header user">Edit Personal Information</h3>								
 					
 <!-- 					onsubmit="return validateLoginForm()" -->
-					<form:form method="POST" name="personalInformationForm" onsubmit="return validatePersonalInformationForm()" modelAttribute="personalInformation" action="update-information">
+<%--                     <c:if test="${(personalInformationForProfile.firstName == null && personalInformationForProfile.lastName == null) || --%>
+<%--                     (personalInformationForProfile.firstName == '' && personalInformationForProfile.lastName == '')"}"> --%>
+<%--                     <form:form method="POST" name="personalInformationForm" modelAttribute="personalInformation" action="update-information">                  --%>
+<%--                     </c:if> --%>
+					<form:form method="POST" name="personalInformationForm" modelAttribute="personalInformation" action="update-information">
 						<spring:message code="first.name" var="placeholderFirstName" />
 						<spring:message code="last.name" var="placeholderLastName" />
 						
 						<!-- First Name -->
-						<div class="form-group">
-						
+						<div class="form-group">	
+									
 						<form:label path="firstName">${placeholderFirstName}</form:label>
-						<form:input path="firstName" placeholder='${placeholderFirstName}' onkeyup="clearEmptyFirstname()" class="form-control"/>
+                        <form:input path="firstName" placeholder='${placeholderFirstName}' value = '${personalInformationForProfile.firstName}' class="form-control"/>
 			            <form:errors path="firstName" />
-			            <span id="emptyFirstname"> </span>
 						
 						</div>
 						<!-- Last Name -->
-						<div class="form-group">
-						
+						<div class="form-group">	
+										
 						<form:label path="lastName" >${placeholderLastName}</form:label>
-						<form:input path="lastName" placeholder='${placeholderLastName}' onkeyup="clearEmptyLastname()" class="form-control"/>
+						<form:input path="lastName" placeholder='${placeholderLastName}' value = '${personalInformationForProfile.lastName}' class="form-control"/>
 			            <form:errors path="lastName" />
-			            <span id="emptyLastname"> </span>
 						    
 						</div>
 						<button type="submit" class="btn btn-transparent">Save My Changes</button>
@@ -286,52 +286,6 @@
       <a id="top" class="" href=""><i class="fa fa-angle-up"></i></a>
     </div>
 </footer>
-
-  <script type="text/javascript">
-  function clearEmptyFirstname() {
-      document.getElementById('emptyFirstname').textContent=null  
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function clearEmptyLastname() {
-      document.getElementById('emptyLastname').textContent=null 
-  }
-  </script>
-  
-  <script type="text/javascript">
-  function validatePersonalInformationForm() {
-	  var flag = false; 
-	  
-	  var emptyField;
-	  var firstName = document.forms["personalInformationForm"]["firstName"].value; 
-      var lastName = document.forms["personalInformationForm"]["lastName"].value;
-
-      if(firstName != "" && lastName != ""){
-          flag = true;
-      } else {
-
-//     	  jQuery.noConflict();
-    	  $.ajax({
-     	        url: 'get-message-empty-field',
-     	        dataType: "text", 
-     	        async: false,
-     	        success: function(data) {
-     	            emptyField = data;		          
-     	        }
-     	      });
-
-      
-      if (firstName == "") {
-          document.getElementById('emptyFirstname').textContent = emptyField;
-      } 
-      if (lastName == "") { 
-	      document.getElementById('emptyLastname').textContent = emptyField;	            
-      }    
-      }  
-      return flag;
-  }
-  </script>
   
   <script type="text/javascript">
   function clearEmptyCurrentPassword() {

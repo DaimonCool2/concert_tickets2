@@ -1,6 +1,5 @@
 package kz.java.training.dao;
 
-import kz.java.training.entity.ChangePasswordEntity;
 import kz.java.training.entity.User;
 
 public interface UserDao extends AbstractDao<User>{
@@ -20,5 +19,7 @@ public interface UserDao extends AbstractDao<User>{
 	boolean isCurrentPasswordIsCorrect(String currentPassword, int userId);
 	
 	boolean isUserWithThisEmailExist(String email);
+	
+	String selectUsername(int userId);
 
 }

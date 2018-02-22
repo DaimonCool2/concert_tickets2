@@ -6,9 +6,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import kz.java.training.validation.sequence.First;
-import kz.java.training.validation.sequence.Second;
-
 public class User {
 
 	@NotEmpty(message = "Пустое поле")

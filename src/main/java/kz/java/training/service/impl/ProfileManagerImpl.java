@@ -20,7 +20,7 @@ public class ProfileManagerImpl implements ProfileManager {
 
 	@Autowired
 	private PersonalINformationDao personalInformationDao;
-	
+
 	@Autowired
 	private ChangePasswordValidator changePasswordValidator;
 
@@ -28,19 +28,13 @@ public class ProfileManagerImpl implements ProfileManager {
 	private UserDao userDao;
 
 	@Override
-	public String updateProfileInformation(PersonalInformation personalInformation, int userId,
-			BindingResult bindingResult, RedirectAttributes rd) {
-		if (bindingResult.hasErrors()) {
-			rd.addFlashAttribute("org.springframework.validation.BindingResult.personalInformation", bindingResult);
-			rd.addFlashAttribute("repeatPersonalInformation", personalInformation);
+	public String updateProfileInformation(PersonalInformation personalInformation, int userId) {
+		if (userDao.ifUserHasPersonalInformationForeignKey(userId)) {
+			PersonalInformationWithUserId piWithUserId = new PersonalInformationWithUserId(personalInformation, userId);
+			personalInformationDao.updateEntity(piWithUserId);
 		} else {
-			if (userDao.ifUserHasPersonalInformationForeignKey(userId)) {
-				PersonalInformationWithUserId piWithUserId = new PersonalInformationWithUserId(personalInformation, userId);
-                personalInformationDao.updateEntity(piWithUserId);
-			} else {
-				int piId = personalInformationDao.insertPersonalInformationWithGeneratedKey(personalInformation);
-				userDao.insertPersonalInformationForeignKey(userId, piId);
-			}
+			int piId = personalInformationDao.insertPersonalInformationWithGeneratedKey(personalInformation);
+			userDao.insertPersonalInformationForeignKey(userId, piId);
 		}
 		return "redirect:/profile-information";
 	}
@@ -64,4 +58,14 @@ public class ProfileManagerImpl implements ProfileManager {
 		return userDao.isCurrentPasswordIsCorrect(currentPassword, userId);
 	}
 
-}  
+	@Override
+	public String getUsernameFromDB(int userId) {
+		return userDao.selectUsername(userId);
+	}
+
+	@Override
+	public PersonalInformation getPersonalInformationFromDB(int userId) {
+		return personalInformationDao.findEntityById(userId);
+	}
+
+}

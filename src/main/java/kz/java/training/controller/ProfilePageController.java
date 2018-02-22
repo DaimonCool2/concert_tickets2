@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kz.java.training.aspect.annotation.LoadAttribute;
+import kz.java.training.aspect.annotation.ReturnDefaultPageIfIdNull;
 import kz.java.training.entity.ChangePasswordEntity;
 import kz.java.training.entity.PersonalInformation;
 import kz.java.training.service.ProfileManager;
@@ -27,28 +29,23 @@ public class ProfilePageController {
 	private ProfileManager profileManager;
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String profile(ModelMap modelMap) {
-		if (modelMap.get("id") == null) {
-			return "redirect:/";
-		} else {
-			return "profile";
-		}
+	@ReturnDefaultPageIfIdNull
+	public ModelAndView profile(ModelMap modelMap) {
+		return new ModelAndView("profile");
 	}
 
 	@RequestMapping(value = "/profile-information", method = RequestMethod.GET)
-	public ModelAndView userInformation(
-			@ModelAttribute("repeatPersonalInformation") PersonalInformation personalInformation,
-			@ModelAttribute("repeatChangePasswordEntity") ChangePasswordEntity changePasswordEntity) {
+	@ReturnDefaultPageIfIdNull
+	public ModelAndView userInformation(ModelMap modelMap, @ModelAttribute("repeatChangePasswordEntity") ChangePasswordEntity changePasswordEntity) {
 		ModelAndView modelAndView = new ModelAndView("user-information");
-		modelAndView.addObject("personalInformation", personalInformation);
+		modelAndView.addObject("personalInformation", new PersonalInformation());
 		modelAndView.addObject("changePasswordEntity", changePasswordEntity);
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/update-information", method = RequestMethod.POST)
-	public String updateInformation(@Valid @ModelAttribute PersonalInformation personalInformation,
-			BindingResult bindingResult, @ModelAttribute("id") int userId, RedirectAttributes rd) {
-		return profileManager.updateProfileInformation(personalInformation, userId, bindingResult, rd);
+	public String updateInformation(@Valid @ModelAttribute PersonalInformation personalInformation, @ModelAttribute("id") int userId, RedirectAttributes rd) {
+		return profileManager.updateProfileInformation(personalInformation, userId);
 	}
 
 	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
@@ -57,10 +54,22 @@ public class ProfilePageController {
 		return profileManager.changePassword(changePasswordEntity, userId, bindingResult, rd);
 	}
 
-	@RequestMapping(value = "/check-current-password", method = RequestMethod.POST, produces = {
-			"application/json" })
+	@RequestMapping(value = "/check-current-password", method = RequestMethod.POST, produces = { "application/json" })
 	@ResponseBody
 	public boolean checkIfUserExist(@RequestParam String currentPassword, @ModelAttribute("id") int userId) {
-		return profileManager.isCurrentPasswordCorrect(currentPassword, userId);		
+		return profileManager.isCurrentPasswordCorrect(currentPassword, userId);
 	}
+
+	@ModelAttribute("username")
+	@LoadAttribute
+	public String getUsername(ModelMap modelMap) {
+		return profileManager.getUsernameFromDB((int) modelMap.get("id"));
+	}
+	
+	@ModelAttribute("personalInformationForProfile")
+	@LoadAttribute
+	public PersonalInformation getPersonalInformation(ModelMap modelMap) {
+		return profileManager.getPersonalInformationFromDB((int) modelMap.get("id"));
+	}
+	
 }
