@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import kz.java.training.dao.UserDao;
 import kz.java.training.dao.impl.UserDaoImpl;
 import kz.java.training.entity.RegistrationUser;
 import kz.java.training.service.RegistrationManager;
@@ -16,9 +17,9 @@ public class RegistrationUserValidator implements Validator {
 	private static final String USERNAME_PATTERN = "[a-zA-Z0-9_\\-]{3,}";
 	private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,4}$";
 	private static final String PASSWORD_PATTERN = "[a-zA-Z0-9_\\-]{6,}";
-
+	
 	@Autowired
-	private RegistrationManager registrationManager;
+	private UserDao userDao;
 
 	@Override
 	public boolean supports(Class<?> arg0) {
@@ -45,7 +46,7 @@ public class RegistrationUserValidator implements Validator {
 				}
 			}
 		}
-		if (registrationManager.checkIfUserExist(user.getUsername())) {
+		if (userDao.isUserExist(user.getUsername())) {
 			errors.rejectValue("username", "user.exists");
 		}
 

@@ -4,10 +4,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import kz.java.training.entity.AddTicket;
 import kz.java.training.entity.Ticket;
 
 @Service
-public class AddTicketValidator implements Validator {
+public class TicketValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -17,13 +18,11 @@ public class AddTicketValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		Ticket ticket = (Ticket) target;
-		if (ticket.getMusicGenre() == null) {
-			errors.rejectValue("musicGenreIsNull", "musin.genre.is.null");
+		AddTicket addTicket = (AddTicket) target;
+		if (addTicket.getMusicGenre() == null) {
+			errors.rejectValue("musicGenre", "musiñ.genre.is.null");
 		}
-		if (ticket.getDateOfTheEvent() == null) {
-			errors.rejectValue("dateOfTheEventIsNull", "date.of.the.event.is.null");
-		}
+
 	}
 
 }

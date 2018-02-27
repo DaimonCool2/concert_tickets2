@@ -35,10 +35,6 @@
 			<mapping path="/*" />
 			<beans:ref bean="localeChangeInterceptor" />
 		</interceptor>
-		<interceptor>
-		    <mapping path="/add-new-ticket"/>
-		    <beans:bean class="kz.java.training.interceptor.AddTicketInterceptor" /> 
-		</interceptor>
 	</interceptors>
 	
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

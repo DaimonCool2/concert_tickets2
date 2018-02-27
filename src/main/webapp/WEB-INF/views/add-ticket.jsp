@@ -49,7 +49,7 @@
                                     <a class="nav-link" href="dashboard.html">Dashboard</a>
                                 </li>
                                 <li class="nav-item dropdown dropdown-slide">
-                                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Pages <span><i class="fa fa-angle-down"></i></span>
 								</a>
                                     <!-- Dropdown list -->
@@ -116,9 +116,18 @@
                 <div class="col-md-10 offset-md-1 col-lg-3 offset-lg-0"> </div>
 
                 <div class="col-md-10 offset-md-1 col-lg-6 offset-lg-0">
-
-<!-- onsubmit="return validateAddTicketForm()" -->
-                      <form:form method="POST" name="addTicketForm"  modelAttribute="ticket" action="add-new-ticket" enctype="multipart/form-data" class="form">
+                      <form:form method="POST" name = "addTicketForm" modelAttribute="addTicket" action="add-new-ticket" onsubmit="return validateAddTicketForm2()"  enctype="multipart/form-data" class="form">
+                      
+                        <div class="form-group">
+                            <spring:message code="price" var="placeholderPrice" />
+                        
+                            <form:label path="price">${placeholderPrice}</form:label>
+                            <form:input path="price" placeholder='${placeholderPrice}' onkeyup="clearEmptyPrice()" class="form-control"/>
+			                <form:errors path="price" />
+			                <span id="emptyPrice"> </span>
+                                                
+                        </div>
+                        
                         <div class="form-group">
                             <spring:message code="name.of.group" var="placeholderNameOfGroup" />
                         
@@ -145,6 +154,7 @@
                                  <option><spring:message code="rap"/></option>
                                  <option><spring:message code="jazz"/></option>
                             </select>
+                            <form:errors path="musicGenre" />  
                         </div>
                         <div class="form-group">
                             <spring:message code="city" var="placeholderCity" />
@@ -165,85 +175,22 @@
                         
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="inputState">Year</label>
-                                <select name = "year" id="inputState" class="form-control">
-                                    <option selected>2017</option>
-                                     <c:forEach var="i" begin="2017" end="2020">
-                                       <option >${i}</option>
-                                     </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputState">Month</label>
-                                <select name = "month" id="inputState" class="form-control">
-                                    <option selected>01</option>
-                                    <c:forEach var="i" begin="2" end="12">
-                                       <option>
-                                         <c:if test="${i < 10}">
-                                           0${i}
-                                         </c:if>
-                                         <c:if test="${i >= 10}">
-                                           ${i}
-                                         </c:if>
-                                       </option>
-                                     </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputState">Day</label>
-                                <select name = "day" id="inputState" class="form-control">
-                                    <option selected>01</option>
-                                    <c:forEach var="i" begin="2" end="31">
-                                       <option>
-                                         <c:if test="${i < 10}">
-                                           0${i}
-                                         </c:if>
-                                         <c:if test="${i >= 10}">
-                                           ${i}
-                                         </c:if>
-                                       </option>
-                                     </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputState">Hour</label>
-                                <select name = "hour" id="inputState" class="form-control">
-                                    <option selected>00</option>
-                                    <c:forEach var="i" begin="1" end="23">
-                                       <option>
-                                         <c:if test="${i < 10}">
-                                           0${i}
-                                         </c:if>
-                                         <c:if test="${i >= 10}">
-                                           ${i}
-                                         </c:if>
-                                       </option>
-                                     </c:forEach>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="inputState">Minute</label>
-                                <select name = "minute" id="inputState" class="form-control">
-                                    <option selected>01</option>
-                                     <c:forEach var="i" begin="2" end="59">
-                                       <option>
-                                         <c:if test="${i < 10}">
-                                           0${i}
-                                         </c:if>
-                                         <c:if test="${i >= 10}">
-                                           ${i}
-                                         </c:if>
-                                       </option>
-                                     </c:forEach>
-                                </select>
-                            </div>
+                        <div class="form-group col-md-6">
+                            <spring:message code="date_time_of_event" var="placeholdeDateAndTimeOfTheEvent" />    
+                                             
+                            <form:label path="dateOfTheEvent">${placeholdeDateAndTimeOfTheEvent}</form:label>
+                            <input name = "dateAndTimeOfTheEvent" type="datetime-local" >
+                            <form:errors path="dateOfTheEvent" />
+                            </br>
+                            <span id="emptyDateOfTheEvent"> </span>
+                            
+                        </div>
                         </div>
                         <div class="form-group">
                             <spring:message code="description" var="placeholderDescription" />
                         
                             <form:label path="description">${placeholderDescription}</form:label>
-                            <form:textarea path="description" placeholder='${placeholderDescription}' onkeyup="clearEmptyDescription()" class="form-control" rows="4" style="height: 150px"/>
+                            <form:textarea path="description" placeholder='${placeholderDescription}' class="form-control" rows="4" style="height: 150px"/>
 			                <form:errors path="description" />
                         
                         </div>
@@ -309,7 +256,134 @@
             <a id="top" class="" href=""><i class="fa fa-angle-up"></i></a>
         </div>
     </footer>
+    
+     <script type="text/javascript">
+   function validateAddTicketForm() { 
+	    document.getElementById('emptyDateOfTheEvent').textContent = null; 
+	    var emptyField;
+	   
+	    var flag = false;
+        var price = document.forms["addTicketForm"]["price"].value; 
+        var nameOfGroup = document.forms["addTicketForm"]["nameOfGroup"].value; 
+        var numberOfTickets = document.forms["addTicketForm"]["numberOfTickets"].value; 
+        var city = document.forms["addTicketForm"]["city"].value;
+        var location = document.forms["addTicketForm"]["location"].value;
+        var dateOfTheEvent = document.forms["addTicketForm"]["dateAndTimeOfTheEvent"].value;
 
+        if(price != "" && nameOfGroup != "" && numberOfTickets != "" && city != "" && location != "" && dateOfTheEvent != ""){
+            flag = true;
+        } else {
+            
+      	     jQuery.noConflict();
+        	 $.ajax({
+     	        url: 'get-message-empty-field',
+     	        dataType: "text", 
+     	        async: false,
+     	        success: function(data) {
+     	          emptyField = data;		          
+     	        }
+     	      });   
+        
+        if (price == "") { 
+	       document.getElementById('emptyPrice').textContent = emptyField;    	      
+        }
+        if (nameOfGroup == "") { 
+           document.getElementById('emptyNameOfGroup').textContent = emptyField; 
+        }
+        if (numberOfTickets == "") { 
+	       document.getElementById('emptyNumberOfTickets').textContent = emptyField;	            
+        } 
+        if (city == "") { 
+      	   document.getElementById('emptyCity').textContent = emptyField; 
+        } 
+        if (location == "") { 
+       	   document.getElementById('emptyLocation').textContent = emptyField; 
+        } 
+        if (dateOfTheEvent == "") { 
+           document.getElementById('emptyDateOfTheEvent').textContent = emptyField; 
+        } 
+        
+        }
+        
+        return flag;
+ } 
+   </script> 
+   
+   <script type="text/javascript">
+     function validateAddTicketForm2() {
+ 	   var flag = false;
+        
+       if(validateAddTicketForm()){
+           var pricePattern = /^(?:[0-9]\d+|\d)(?:\.\d\d)?$/;
+           var numberOfTicketsPattern =  /^(0|[1-9][0-9]*)$/;
+           var price = document.forms["addTicketForm"]["price"].value; 
+           var numberOfTickets = document.forms["addTicketForm"]["numberOfTickets"].value; 
+
+           if(price.match(pricePattern) != null && numberOfTickets.match(numberOfTicketsPattern)){
+           flag = true;
+           } else {
+
+           if(price.match(pricePattern) == null){
+        	   jQuery.noConflict();              
+    		   $.ajax({
+        	        url: 'get-message-price-pattern-error',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        	 	       document.getElementById('emptyPrice').textContent = data;    	      
+        	        }
+        	      });		   
+           } 
+
+           if(numberOfTickets.match(numberOfTicketsPattern) == null){
+        	   jQuery.noConflict();         
+    		   $.ajax({
+        	        url: 'get-message-name-of-group-pattern-error',
+        	        dataType: "text", 
+        	        async: false,
+        	        success: function(data) {
+        	 	       document.getElementById('emptyNumberOfTickets').textContent = data;	            
+        	        }
+        	      });		   
+           } 	   
+           
+       }
+     }
+       return flag;
+     }
+  </script>
+    
+      <script type="text/javascript">
+      function clearEmptyPrice() {
+        document.getElementById('emptyPrice').textContent=null 
+      }
+       </script>
+       
+      <script type="text/javascript">
+      function clearEmptyNameOfGroup() {
+        document.getElementById('emptyNameOfGroup').textContent=null 
+      }
+      </script>
+       
+      <script type="text/javascript">
+      function clearEmptyNumberOfTickets() {
+        document.getElementById('emptyNumberOfTickets').textContent=null 
+      }
+      </script>
+       
+      <script type="text/javascript">
+      function clearEmptyCity() {
+        document.getElementById('emptyCity').textContent=null 
+      }
+      </script>
+      
+      <script type="text/javascript">
+      function clearEmptyLocation() {
+        document.getElementById('emptyLocation').textContent=null 
+      }
+      </script>      
+
+      
     <!-- JAVASCRIPTS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     

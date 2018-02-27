@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.stereotype.Repository;
 
 import kz.java.training.dao.TicketDao;
+import kz.java.training.entity.AddTicket;
 import kz.java.training.entity.MusicGenre;
 import kz.java.training.entity.Ticket;
 
@@ -53,18 +54,20 @@ public class TicketDaoImpl implements TicketDao {
 
 	@Override
 	public void addTickets(Ticket ticket) {
-		String sql = "INSERT INTO tickets (name_of_group, number_of_tickets, music_genre, city, location, date_of_the_event, description, image)"
-				+ " VALUES (:nameOfGroup, :numberOfTickets, :musicGenre, :city, :location, :dateOfTheEvent, :description, :image)";
+		String sql = "INSERT INTO tickets (price, name_of_group, number_of_tickets, music_genre, city, location, date_of_the_event, description, image)"
+				+ " VALUES (:price, :nameOfGroup, :numberOfTickets, :musicGenre, :city, :location, :dateOfTheEvent, :description, :image)";
+		AddTicket addTicket = (AddTicket) ticket;
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("nameOfGroup", ticket.getNameOfGroup());
-		parameters.addValue("numberOfTickets", ticket.getNumberOfTickets());
-		parameters.addValue("musicGenre", ticket.getMusicGenre().getMusicGenreInDB());
-		parameters.addValue("city", ticket.getCity());
-		parameters.addValue("location", ticket.getLocation());
-		parameters.addValue("dateOfTheEvent", ticket.getDateOfTheEvent());
-		parameters.addValue("description", ticket.getDescription());
-		parameters.addValue("image", new SqlLobValue(new ByteArrayInputStream(ticket.getImage()),
-				ticket.getImage().length, new DefaultLobHandler()), Types.BLOB);
+		parameters.addValue("price", addTicket.getPrice());
+		parameters.addValue("nameOfGroup", addTicket.getNameOfGroup());
+		parameters.addValue("numberOfTickets", addTicket.getNumberOfTickets());
+		parameters.addValue("musicGenre", addTicket.getMusicGenre().getMusicGenreInDB());
+		parameters.addValue("city", addTicket.getCity());
+		parameters.addValue("location", addTicket.getLocation());
+		parameters.addValue("dateOfTheEvent", addTicket.getDateOfTheEvent());
+		parameters.addValue("description", addTicket.getDescription());
+		parameters.addValue("image", new SqlLobValue(new ByteArrayInputStream(addTicket.getImage()),
+				addTicket.getImage().length, new DefaultLobHandler()), Types.BLOB);
 		jdbcTemplate.update(sql, parameters);
 	}
 

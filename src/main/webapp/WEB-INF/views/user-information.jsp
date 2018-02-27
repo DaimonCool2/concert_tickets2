@@ -125,6 +125,8 @@
 						<ul>
 							<li>
 								<a href="dashboard-my-ads.html"><i class="fa fa-user"></i> My Ads</a></li>
+							<li ><a href="add-ticket"><i class="fa fa-envelope"></i> Add ticket</a></li>
+								
 							<li>
 								<a href="dashboard-favourite-ads.html"><i class="fa fa-bookmark-o"></i> Favourite Ads <span>5</span></a>
 							</li>

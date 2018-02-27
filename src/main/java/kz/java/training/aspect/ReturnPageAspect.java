@@ -14,7 +14,7 @@ public class ReturnPageAspect {
 
 	@Around("@annotation(kz.java.training.aspect.annotation.ReturnDefaultPageIfIdNull) && args(modelMap,..)")
 	public ModelAndView returnDefaultPage(ProceedingJoinPoint joinPoint, ModelMap modelMap) {
-		 ModelAndView modelAndView = new ModelAndView("error");
+		ModelAndView modelAndView = new ModelAndView("error");
 		if (modelMap.get("id") == null) {
 			modelAndView.setViewName("redirect:/");
 		} else {

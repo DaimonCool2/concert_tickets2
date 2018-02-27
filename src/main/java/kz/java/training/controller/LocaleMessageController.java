@@ -72,4 +72,18 @@ public class LocaleMessageController {
 		Locale locale = LocaleContextHolder.getLocale();
 		return messageSource.getMessage("current.password.is.wrong", new Object[0], locale);
 	}
+
+	@RequestMapping(value = "/get-message-price-pattern-error", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getPriceErrorPattern() {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage("price.pattern.error", new Object[0], locale);
+	}
+
+	@RequestMapping(value = "/get-message-name-of-group-pattern-error", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getNumberOfTicketsErrorPattern() {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage("number.of.tickets.pattern.error", new Object[0], locale);
+	}
 }
