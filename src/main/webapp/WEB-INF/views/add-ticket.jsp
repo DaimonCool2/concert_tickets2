@@ -147,12 +147,14 @@
                                                 
                         </div>
                         <div class="form-group">
-                            <label for="exampleFormControlSelect1">Music genre</label>                           
+                            <spring:message code="music.genre" var="placeholderMusicGenre" />
+                        
+                            <form:label path="musicGenre">${placeholderMusicGenre}</form:label>                           
                             <select name = "musGenre" class="form-control" id="exampleFormControlSelect1">
-                                 <option><spring:message code="rock"/></option>
-                                 <option><spring:message code="pop"/></option>
-                                 <option><spring:message code="rap"/></option>
-                                 <option><spring:message code="jazz"/></option>
+                                 <option value="rock" label="<spring:message code="rock"/>" />
+                                 <option value="pop" label="<spring:message code="pop"/>" />
+                                 <option value="rap" label="<spring:message code="rap"/>" />
+                                 <option value="jazz" label="<spring:message code="jazz"/>" />
                             </select>
                             <form:errors path="musicGenre" />  
                         </div>

@@ -2,8 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
   <!-- SITE TITTLE -->
@@ -12,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calssimax</title>
   
- <link href="<c:url value="/resources/plugins/bootstrap/dist/css/bootstrap.min.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/plugins/bootstrap/dist/css/bootstrap.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/plugins/font-awesome/css/font-awesome.min.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/plugins/slick-carousel/slick/slick.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/plugins/slick-carousel/slick/slick-theme.css" />" rel="stylesheet">
@@ -25,7 +27,7 @@
 
 </head>
 
-<body class="body-wrapper">
+<body class="body-wrapper" style="position: relative; min-height: 100%; ">
 
 <section>
 	<div class="container">
@@ -33,7 +35,7 @@
 			<div class="col-md-12">
 				<nav class="navbar navbar-expand-lg  navigation">
 					<a class="navbar-brand" href="index.html">
-						<img src="images/logo.png" alt="">
+						<img src="<c:url value="/resources/images/logo.png" />" alt="">
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -94,23 +96,25 @@
 			<div class="col-md-12">
 				<!-- Advance Search -->
 				<div class="advance-search">
-					<form>
+                      <form:form method="GET" action="/find-tickets" name = "searchTicketForm" modelAttribute="searchTicket">
 						<div class="form-row">
 							<div class="form-group col-md-4">
-								<input type="text" class="form-control" id="inputtext4" placeholder="Name of group">
+							    <spring:message code="name.of.group" var="placeholderNameOfGroup"/>
+								<form:input path="nameOfGroup" class="form-control" id="inputtext4" placeholder='${placeholderNameOfGroup}' />
 							</div>
 							<div class="form-group col-md-3">
-								<input type="text" class="form-control" id="inputCategory4" placeholder="City">
+				                <spring:message code="city" var="placeholderCity"/>
+								<form:input path="city" class="form-control" id="inputCategory4" placeholder='${placeholderCity}' />
 							</div>
 							<div class="form-group col-md-3">
-								<input type="text" class="form-control" id="inputLocation4" placeholder="Music genre">
+				                <spring:message code="music.genre" var="placeholderMusicGenre"/>
+								<input name="musGenre" class="form-control" id="inputLocation4" placeholder='${placeholderMusicGenre}' />
 							</div>
-							<div class="form-group col-md-2">
-								
-								<button type="submit" class="btn btn-primary">Search Now</button>
+							<div class="form-group col-md-2">							
+								<button type="submit" class="btn btn-primary"><spring:message code="search.tickets" /></button>
 							</div>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>
@@ -122,7 +126,7 @@
 			<div class="col-md-12">
 				<div class="search-result bg-gray">
 					<h2>Results For "Rock"</h2>
-					<p>123 Results</p>
+					<p>${ fn:length(listOfTickets) } Results</p>
 				</div>
 			</div>
 		</div>
@@ -131,12 +135,22 @@
 				<div class="category-sidebar">
 					<div class="widget category-list">
 	<h4 class="widget-header">All Category</h4>
+	<form method="GET" action="find-tickets" id="genre_form">
+	<input type="hidden" name="musGenre" id="musGenre" value=""/>
 	<ul class="category-list">
-		<li><a href="category.html">Rock <span>93</span></a></li>
-		<li><a href="category.html">Pop <span>233</span></a></li>
-		<li><a href="category.html">Jazz  <span>183</span></a></li>
-		<li><a href="category.html">Rap <span>343</span></a></li>
+		<li><a href="" onclick="rock(); return false;">Rock <span>93</span></a></li>
+		<c:set var="val1"><spring:message code="rock"/></c:set>
+	    
+		<li><a href="" onclick="pop(); return false;">Pop <span>233</span></a></li>
+		<c:set var="val2"><spring:message code="pop"/></c:set>
+	    
+		<li><a href="" onclick="jazz(); return false;">Jazz  <span>183</span></a></li>
+		<c:set var="val3"><spring:message code="jazz"/></c:set>
+	    
+		<li><a href="" onclick="rap(); return false;">Rap <span>343</span></a></li>
+		<c:set var="val4"><spring:message code="rap"/></c:set>
 	</ul>
+	</form>
 </div>
 
 				</div>
@@ -146,111 +160,55 @@
 					<div class="row">
 						<div class="col-md-6">
 							<strong>Sort</strong>
-							<select>
-								<option>Most Recent</option>
-								<option value="1">Most Popular</option>
-								<option value="2">Lowest Price</option>
-								<option value="4">Highest Price</option>
+							<select onchange="changeFunc(value)">
+								<option value="sort_by_price">Sort by price</option>
+								<option value="sort_by_name">Sort by name</option>
+								<option value="sort_by_date">Sort by date</option>
+								<option value="sort_by_city">Sort by city</option>
 							</select>
 						</div>
 					</div>
 				</div>
 				<div class="product-grid-list">
-					<div class="row mt-30">
-<div class="col-sm-12 col-lg-4 col-md-6">
-							<!-- product card -->
+					<div class="row mt-30" id="sortContainer">
+	<c:forEach items="${listOfTickets}" var="ticket">
+	<div class="sort col-sm-12 col-lg-4 col-md-6">
 <div class="product-item bg-light">
 	<div class="card">
 		<div class="thumb-content">
-			 <div class="price">15000 тнг</div> 
-			<a href="">
-				<img class="card-img-top img-fluid" src="<c:url value="/resources/images/products/aria_big.jpg" />" style="height:170px; width: 260px" alt="Card image cap">
-			</a>
+			 <div class="sort-price price">${ ticket.price }</div> 
+			    <c:if test="${not empty ticket.imageForPage }">
+				  <img class="card-img-top img-fluid" src="data:image/gif;base64,${ ticket.imageForPage }" style="height:170px; width: 260px" alt="Card image cap">
+				</c:if>
+				<c:if test="${empty ticket.imageForPage }">	
+				<img class="card-img-top img-fluid" src="<c:url value="/resources/images/home/empty_photo.png" />" style="height:170px; width: 260px" alt="Card image cap">
+				</c:if>
 		</div>
 		<div class="card-body">
-		    <h4 class="card-title"><a href="">Ария</a></h4>
+		    <h4 class="sort-name-of-group card-title">${ ticket.nameOfGroup }</h4>
 		    <ul class="list-inline product-meta">
 		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-music"></i>Рок</a>
+		    		<a href=""><i class="fa fa-music"></i><spring:message code="${ fn:toLowerCase( ticket.musicGenre )}"/> </a>
 		    	</li>
                
 		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-calendar"></i>26 Nov. 2017. 15:30</a>
+		    		<a href="" class="sort-date"><i class="fa fa-calendar"></i>${ ticket.dateOfTheEventForPage }</a>
 		    	</li>
 		    </ul>
-		    <p class="card-text"><i class="fa fa-map-o"></i> Город Караганда</p>
-            <p class="card-text"><i class="fa fa-street-view"></i> Шахтер. улица какая-то</p>
-
-            <button type="submit" class="btn btn-outline-primary btn-block">Больше инф.</button>
+		    <p class="card-text"><i class="	fa fa-envelope-o"></i> <spring:message code="quantity"/>: ${ ticket.numberOfTickets }</p>		 
+		    <p class="sort-city card-text"><i class="fa fa-map-o"></i> <spring:message code="city"/> ${ ticket.city }</p>
+            <p class="card-text"><i class="fa fa-street-view"></i>${ ticket.location }</p>
+            
+            <a class="btn btn-outline-primary btn-block"  href="search/${ticket.ticketId}">Больше инф.</a>
+<%--               <button type="submit" class="btn btn-outline-primary btn-block"  onclick="window.location.href='/search/${ticket.ticketId}'">Больше инф.</button> --%>
             
 		</div>
 	</div>
 </div>    
 </div>
-                        
-                        <div class="col-sm-12 col-lg-4 col-md-6">
-							<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			 <div class="price">15000 тнг</div> 
-			<a href="">
-				<img class="card-img-top img-fluid" src="<c:url value="/resources/images/products/aria_big.jpg" />" style="height:170px; width: 260px" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Ария</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-music"></i>Рок</a>
-		    	</li>
-               
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-calendar"></i>26 Nov. 2017. 15:30</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"><i class="fa fa-map-o"></i> Город Караганда</p>
-            <p class="card-text"><i class="fa fa-street-view"></i> Шахтер. улица какая-то</p>
-
-            <button type="submit" class="btn btn-outline-primary btn-block">Больше инф.</button>
-            
-		</div>
-	</div>
-</div>    
-</div>
-                        
-                        <div class="col-sm-12 col-lg-4 col-md-6">
-							<!-- product card -->
-<div class="product-item bg-light">
-	<div class="card">
-		<div class="thumb-content">
-			 <div class="price">15000 тнг</div> 
-			<a href="">
-				<img class="card-img-top img-fluid" src="<c:url value="/resources/images/products/aria_big.jpg" />" style="height:170px; width: 260px" alt="Card image cap">
-			</a>
-		</div>
-		<div class="card-body">
-		    <h4 class="card-title"><a href="">Ария</a></h4>
-		    <ul class="list-inline product-meta">
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-music"></i>Рок</a>
-		    	</li>
-               
-		    	<li class="list-inline-item">
-		    		<a href=""><i class="fa fa-calendar"></i>26 Nov. 2017. 15:30</a>
-		    	</li>
-		    </ul>
-		    <p class="card-text"><i class="fa fa-map-o"></i> Город Караганда</p>
-            <p class="card-text"><i class="fa fa-street-view"></i> Шахтер. улица какая-то</p>
-
-            <button type="submit" class="btn btn-outline-primary btn-block">Больше инф.</button>
-            
-		</div>
-	</div>
-</div>    
-</div>
-					
-
+	</c:forEach>				
+	
+	
                         
 </div>
 						
@@ -265,7 +223,7 @@
 =============================-->
 
 <!-- Footer Bottom -->
-<footer class="footer-bottom">
+<footer class="footer-bottom" style="position: absolute; bottom: 0; width:100%">
     <!-- Container Start -->
     <div class="container">
       <div class="row">
@@ -281,7 +239,7 @@
               <li><a class="fa fa-facebook" href=""></a></li>
               <li><a class="fa fa-twitter" href=""></a></li>
               <li><a class="fa fa-pinterest-p" href=""></a></li>
-              <li><a class="fa fa-vimeo" href=""></a></li>
+              <li><a class="fa fa-vk" href="https://vk.com/id218566133"></a></li>
             </ul>
         </div>
       </div>
@@ -289,9 +247,63 @@
     <!-- Container End -->
     <!-- To Top -->
     <div class="top-to">
-      <a id="top" class="" href=""><i class="fa fa-angle-up"></i></a>
+      <a i d="top" class="" href=""><i class="fa fa-angle-up"></i></a>
     </div>
 </footer>
+
+
+
+
+<script>
+function rock(){
+	document.getElementById('musGenre').value='${val1}';
+	document.getElementById('genre_form').submit();
+}
+function pop(){
+	document.getElementById('musGenre').value='${val2}';
+	document.getElementById('genre_form').submit();
+}
+function jazz(){
+	document.getElementById('musGenre').value='${val3}';
+	document.getElementById('genre_form').submit();
+} 
+function rap(){
+	document.getElementById('musGenre').value='${val4}';
+	document.getElementById('genre_form').submit();
+}
+
+
+
+ function changeFunc($i) {
+	console.log('here')	
+ 	var $divs = $("div.sort");
+  	if($i == "sort_by_price"){
+	     var sortByPrice = $divs.sort(function (a, b) {
+       	    	return $(a).find("div.sort-price").text() - $(b).find("div.sort-price").text();
+          });
+         $("#sortContainer").html(sortByPrice);
+    }
+  	if($i == "sort_by_name"){
+	     var sortByName = $divs.sort(function (a, b) {
+                return $(a).find("h4.sort-name-of-group").text().localeCompare($(b).find("h4.sort-name-of-group").text());
+         });
+        $("#sortContainer").html(sortByName);
+    }
+  	if($i == "sort_by_date"){
+	     var sortByDate = $divs.sort(function (a, b) {
+   	    	    return new Date($(a).find("a.sort-date").text()) - new Date($(b).find("a.sort-date").text());
+         });
+        $("#sortContainer").html(sortByDate);
+    }
+  	if($i == "sort_by_city"){
+	     var sortByCity = $divs.sort(function (a, b) {
+                return $(a).find("p.sort-city").text().localeCompare($(b).find("p.sort-city").text());		     
+         });
+        $("#sortContainer").html(sortByCity);
+    }
+   }
+
+</script>
 
   <!-- JAVASCRIPTS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

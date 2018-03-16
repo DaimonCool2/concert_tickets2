@@ -23,18 +23,19 @@ import kz.java.training.service.ProfileManager;
 
 @Controller
 @SessionAttributes("id")
+@RequestMapping(value = "/profile")
 public class ProfilePageController {
 
 	@Autowired
 	private ProfileManager profileManager;
 
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	@ReturnDefaultPageIfIdNull
 	public ModelAndView profile(ModelMap modelMap) {
 		return new ModelAndView("profile");
 	}
 
-	@RequestMapping(value = "/profile-information", method = RequestMethod.GET)
+	@RequestMapping(value = "/information", method = RequestMethod.GET)
 	@ReturnDefaultPageIfIdNull
 	public ModelAndView userInformation(ModelMap modelMap, @ModelAttribute("repeatChangePasswordEntity") ChangePasswordEntity changePasswordEntity) {
 		ModelAndView modelAndView = new ModelAndView("user-information");

@@ -41,6 +41,10 @@ public class Ticket {
 		this.city = city;
 	}
 
+	@Override
+	public String toString() {
+		return "Ticket [nameOfGroup=" + nameOfGroup + ", musicGenre=" + musicGenre + ", city=" + city + "]";
+	}
 
 
 }

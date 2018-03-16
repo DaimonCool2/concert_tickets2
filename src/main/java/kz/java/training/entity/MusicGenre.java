@@ -1,33 +1,39 @@
 package kz.java.training.entity;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
+import org.springframework.context.MessageSource;
+
 public enum MusicGenre {
 
-	ROCK("рок", 1), POP("поп", 2), RAP("рэп", 3), JAZZ("джаз", 4);
+	ROCK, POP, RAP, JAZZ;
 
-	private String musicGenreInRussian;
-	private int musicGenreInDB;
-
-	MusicGenre(String musicGenreInRussian, int musicGenreInDB) {
-		this.musicGenreInRussian = musicGenreInRussian;
-		this.musicGenreInDB = musicGenreInDB;
-	}
+	//private static List<String> genres = Arrays.asList("rock", "pop", "rap", "jazz");
 
 	public static MusicGenre getMusicGenreEnum(String musicGenre) {
 		for (MusicGenre musGenre : MusicGenre.values()) {
-			if (musGenre.name().equalsIgnoreCase(musicGenre)
-					|| musGenre.getMusicGenreInRussian().equalsIgnoreCase(musicGenre)) {
+			if (musGenre.name().equalsIgnoreCase(musicGenre)) {
 				return musGenre;
 			}
 		}
 		return null;
 	}
 
-	public String getMusicGenreInRussian() {
-		return musicGenreInRussian;
+	public static MusicGenre getMusicGenreEnumByDifferentLanguageValue(String musicGenre, MessageSource messageSource,
+			Locale locale) {
+		MusicGenre musGenre = null;
+		for (MusicGenre musicGenreEnum : MusicGenre.values()) {
+			if (messageSource.getMessage(musicGenreEnum.name().toLowerCase(), null, locale).equalsIgnoreCase(musicGenre)) {
+				musGenre = musicGenreEnum;
+			}
+		}
+		return musGenre;
 	}
 
-	public int getMusicGenreInDB() {
-		return musicGenreInDB;
-	}
 
 }

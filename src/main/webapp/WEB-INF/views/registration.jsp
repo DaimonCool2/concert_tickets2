@@ -276,7 +276,9 @@
          	        } else {
              	    flag = true;    
              	    }	
-         	    }
+         	    }, error: function(){
+    		    	window.location.replace("/system-error");
+    	        }
      	      });
            }
 

@@ -18,8 +18,8 @@ public class TicketValidator implements Validator {
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		AddTicket addTicket = (AddTicket) target;
-		if (addTicket.getMusicGenre() == null) {
+		Ticket ticket = (Ticket) target;
+		if (ticket.getMusicGenre() == null) {
 			errors.rejectValue("musicGenre", "musiñ.genre.is.null");
 		}
 

@@ -609,7 +609,7 @@
     		        flag = data;    		        
     		    },
     		    error: function(){
-    		    	window.location.replace(window.location.href + "database-error");
+    		    	window.location.replace(window.location.href + "system-error");
     	        }
 		    
     		});

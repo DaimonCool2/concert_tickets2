@@ -1,5 +1,6 @@
 package kz.java.training.entity;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 import javax.validation.constraints.Digits;
@@ -58,6 +59,13 @@ public class AddTicket extends Ticket {
 	public void setImage(byte[] image) {
 		this.image = image;
 	}
+	@Override
+	public String toString() {
+		return super.toString() + "AddTicket [price=" + price + ", numberOfTickets=" + numberOfTickets + ", location=" + location
+				+ ", dateOfTheEvent=" + dateOfTheEvent + ", description=" + description + ", image="
+				+ Arrays.toString(image) + "]";
+	}
+	
 	
 
 }

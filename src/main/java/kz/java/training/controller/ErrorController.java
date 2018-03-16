@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ErrorController {
 
-	@RequestMapping(value = "/database-error", method = RequestMethod.GET)
+	@RequestMapping(value = "/system-error", method = RequestMethod.GET)
 	public String mainPage() {
 		return "error";
 	}

@@ -86,4 +86,11 @@ public class LocaleMessageController {
 		Locale locale = LocaleContextHolder.getLocale();
 		return messageSource.getMessage("number.of.tickets.pattern.error", new Object[0], locale);
 	}
+
+	@RequestMapping(value = "/get-message-unacceptable-number-of-tickets", method = RequestMethod.GET, produces = {
+			"text/html; charset=UTF-8" })
+	public String getUnacceptrableNumberOfTickets() {
+		Locale locale = LocaleContextHolder.getLocale();
+		return messageSource.getMessage("unacceptable.number.of.tickets", new Object[0], locale);
+	}
 }
